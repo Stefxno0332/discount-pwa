@@ -180,27 +180,40 @@ const Header = () => {
 
             {/* Mobile Sidebar */}
             {sidebarOpen && (
-                <div className="md:hidden fixed inset-0 z-50 bg-black/50" onClick={closeSidebar}>
+                <>
+                    {/* Backdrop */}
                     <div
-                        className="absolute right-0 top-0 h-full w-[280px] max-w-[85vw] bg-[#ffffff] dark:bg-[#1e293b] shadow-xl transform transition-transform duration-300"
+                        className="md:hidden fixed inset-0 z-[60]"
+                        style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
+                        onClick={closeSidebar}
+                    />
+                    {/* Sidebar Panel */}
+                    <div
+                        className="md:hidden fixed right-0 top-0 h-full w-[280px] max-w-[80vw] z-[70] shadow-2xl"
+                        style={{ backgroundColor: '#0f172a' }}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="p-4 h-full flex flex-col">
-                            <div className="flex justify-between items-center mb-6">
-                                <span className="font-semibold text-lg">Menu</span>
-                                <button onClick={closeSidebar} className="p-2 hover:bg-gray-100 dark:hover:bg-dark-border rounded-lg">
+                        <div className="p-5 h-full flex flex-col text-white">
+                            {/* Header */}
+                            <div className="flex justify-between items-center mb-8 pb-4 border-b border-white/20">
+                                <span className="font-bold text-xl">Menu</span>
+                                <button
+                                    onClick={closeSidebar}
+                                    className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                                >
                                     <FiX className="w-6 h-6" />
                                 </button>
                             </div>
 
+                            {/* Navigation */}
                             <nav className="flex-1 space-y-2">
                                 {navLinks.map((link) => (
                                     <Link
                                         key={link.path}
                                         to={link.path}
-                                        className={`flex items-center justify-between px-4 py-3 rounded-lg ${location.pathname === link.path
-                                            ? 'bg-amazon-orange/10 text-amazon-orange'
-                                            : 'hover:bg-gray-100 dark:hover:bg-dark-border'
+                                        className={`flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${location.pathname === link.path
+                                                ? 'bg-amazon-orange text-white'
+                                                : 'hover:bg-white/10'
                                             }`}
                                     >
                                         {link.label}
@@ -213,17 +226,18 @@ const Header = () => {
                                 ))}
                             </nav>
 
+                            {/* Auth Buttons */}
                             {!isAuthenticated && (
-                                <div className="pt-4 border-t border-gray-200 dark:border-dark-border space-y-3">
+                                <div className="pt-6 border-t border-white/20 space-y-3">
                                     <Link
                                         to="/login"
-                                        className="block w-full py-3 px-4 text-center rounded-lg border border-amazon-orange text-amazon-orange font-medium hover:bg-amazon-orange/10 transition-colors"
+                                        className="block w-full py-3 px-4 text-center rounded-lg border-2 border-amazon-orange text-amazon-orange font-semibold hover:bg-amazon-orange hover:text-white transition-colors"
                                     >
                                         Accedi
                                     </Link>
                                     <Link
                                         to="/register"
-                                        className="block w-full py-3 px-4 text-center rounded-lg bg-amazon-orange text-white font-medium hover:bg-amazon-orange/90 transition-colors"
+                                        className="block w-full py-3 px-4 text-center rounded-lg bg-amazon-orange text-white font-semibold hover:bg-amazon-orange/90 transition-colors"
                                     >
                                         Registrati
                                     </Link>
@@ -231,7 +245,7 @@ const Header = () => {
                             )}
                         </div>
                     </div>
-                </div>
+                </>
             )}
         </header>
     );
