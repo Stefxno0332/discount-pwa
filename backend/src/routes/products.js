@@ -3,6 +3,7 @@ import { Product } from '../models/index.js';
 import { asyncHandler } from '../middleware/index.js';
 import { optionalAuth } from '../middleware/auth.js';
 import { cacheGet, cacheSet } from '../config/redis.js';
+import socialService from '../services/social/socialService.js';
 
 const router = Router();
 
@@ -322,6 +323,14 @@ router.post('/', asyncHandler(async (req, res) => {
     });
 
     await product.save();
+
+    // Auto-post to social media (Telegram, etc.)
+    try {
+        const shareResult = await socialService.shareProduct(product, 'new_deal', ['telegram']);
+        console.log('Social share result:', shareResult);
+    } catch (shareError) {
+        console.error('Social share error (non-blocking):', shareError.message);
+    }
 
     res.status(201).json({
         success: true,
