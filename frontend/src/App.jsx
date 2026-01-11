@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Header } from './components';
-import { Home, ProductDetail, Watchlist, Compare, Settings, Login, Register } from './pages';
+import { Home, ProductDetail, Watchlist, Compare, Settings, Login, Register, Admin } from './pages';
 import { useAuthStore, useAppStore } from './store';
 
 function App() {
@@ -37,6 +37,7 @@ function App() {
                                 <Route path="/watchlist" element={<Watchlist />} />
                                 <Route path="/compare" element={<Compare />} />
                                 <Route path="/settings" element={<Settings />} />
+                                <Route path="/admin" element={<Admin />} />
                             </Routes>
                         </>
                     }

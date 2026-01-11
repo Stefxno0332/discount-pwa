@@ -5,3 +5,5 @@ export { default as Compare } from './Compare';
 export { default as Settings } from './Settings';
 export { default as Login } from './Login';
 export { default as Register } from './Register';
+export { default as Admin } from './Admin';
+
