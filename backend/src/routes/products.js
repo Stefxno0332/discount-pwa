@@ -262,4 +262,141 @@ router.get('/:id/price-history', asyncHandler(async (req, res) => {
     });
 }));
 
+// ============================================
+// MANUAL PRODUCT MANAGEMENT (Admin Endpoints)
+// ============================================
+
+// Create a new product manually
+router.post('/', asyncHandler(async (req, res) => {
+    const {
+        asin,
+        title,
+        description,
+        imageUrl,
+        originalPrice,
+        discountedPrice,
+        category,
+        rating,
+        reviewCount,
+        affiliateLink,
+        brand,
+        features
+    } = req.body;
+
+    // Validation
+    if (!asin || !title || !imageUrl || !originalPrice || !discountedPrice || !category) {
+        return res.status(400).json({
+            success: false,
+            message: 'Required fields: asin, title, imageUrl, originalPrice, discountedPrice, category'
+        });
+    }
+
+    // Check if product already exists
+    const existingProduct = await Product.findOne({ asin });
+    if (existingProduct) {
+        return res.status(400).json({
+            success: false,
+            message: 'Product with this ASIN already exists'
+        });
+    }
+
+    // Calculate discount percentage
+    const discountPercentage = Math.round(((originalPrice - discountedPrice) / originalPrice) * 100);
+
+    const product = new Product({
+        asin,
+        title,
+        description: description || '',
+        imageUrl,
+        originalPrice,
+        discountedPrice,
+        discountPercentage,
+        category,
+        rating: rating || 0,
+        reviewCount: reviewCount || 0,
+        affiliateLink: affiliateLink || `https://www.amazon.it/dp/${asin}`,
+        brand: brand || '',
+        features: features || [],
+        priceHistory: [{ price: discountedPrice, date: new Date() }],
+        isActive: true
+    });
+
+    await product.save();
+
+    res.status(201).json({
+        success: true,
+        message: 'Product created successfully',
+        data: product
+    });
+}));
+
+// Update a product
+router.put('/:id', asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const updates = req.body;
+
+    // Find product by ASIN or MongoDB ID
+    let product = await Product.findOne({ asin: id });
+    if (!product) {
+        product = await Product.findById(id);
+    }
+
+    if (!product) {
+        return res.status(404).json({
+            success: false,
+            message: 'Product not found'
+        });
+    }
+
+    // If price is being updated, add to price history
+    if (updates.discountedPrice && updates.discountedPrice !== product.discountedPrice) {
+        product.priceHistory.push({
+            price: updates.discountedPrice,
+            date: new Date()
+        });
+    }
+
+    // Recalculate discount percentage if prices changed
+    if (updates.originalPrice || updates.discountedPrice) {
+        const origPrice = updates.originalPrice || product.originalPrice;
+        const discPrice = updates.discountedPrice || product.discountedPrice;
+        updates.discountPercentage = Math.round(((origPrice - discPrice) / origPrice) * 100);
+    }
+
+    // Update fields
+    Object.assign(product, updates);
+    product.lastUpdated = new Date();
+
+    await product.save();
+
+    res.json({
+        success: true,
+        message: 'Product updated successfully',
+        data: product
+    });
+}));
+
+// Delete a product
+router.delete('/:id', asyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    // Find and delete by ASIN or MongoDB ID
+    let product = await Product.findOneAndDelete({ asin: id });
+    if (!product) {
+        product = await Product.findByIdAndDelete(id);
+    }
+
+    if (!product) {
+        return res.status(404).json({
+            success: false,
+            message: 'Product not found'
+        });
+    }
+
+    res.json({
+        success: true,
+        message: 'Product deleted successfully'
+    });
+}));
+
 export default router;

@@ -3,7 +3,10 @@ dotenv.config();
 
 const requiredEnvVars = [
     'MONGODB_URI',
-    'JWT_SECRET',
+    'JWT_SECRET'
+];
+
+const optionalEnvVars = [
     'AMAZON_ACCESS_KEY',
     'AMAZON_SECRET_KEY',
     'AMAZON_PARTNER_TAG'
