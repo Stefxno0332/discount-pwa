@@ -182,17 +182,18 @@ const Header = () => {
             {sidebarOpen && (
                 <div className="md:hidden fixed inset-0 z-50 bg-black/50" onClick={closeSidebar}>
                     <div
-                        className="absolute right-0 top-0 h-full w-64 bg-white dark:bg-dark-card shadow-xl animate-slide-left"
+                        className="absolute right-0 top-0 h-full w-[280px] max-w-[85vw] bg-white dark:bg-dark-card shadow-xl transform transition-transform duration-300"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="p-4">
-                            <div className="flex justify-end">
-                                <button onClick={closeSidebar} className="p-2">
+                        <div className="p-4 h-full flex flex-col">
+                            <div className="flex justify-between items-center mb-6">
+                                <span className="font-semibold text-lg">Menu</span>
+                                <button onClick={closeSidebar} className="p-2 hover:bg-gray-100 dark:hover:bg-dark-border rounded-lg">
                                     <FiX className="w-6 h-6" />
                                 </button>
                             </div>
 
-                            <nav className="mt-4 space-y-2">
+                            <nav className="flex-1 space-y-2">
                                 {navLinks.map((link) => (
                                     <Link
                                         key={link.path}
@@ -213,11 +214,17 @@ const Header = () => {
                             </nav>
 
                             {!isAuthenticated && (
-                                <div className="mt-6 space-y-2">
-                                    <Link to="/login" className="block btn-secondary w-full text-center">
+                                <div className="pt-4 border-t border-gray-200 dark:border-dark-border space-y-3">
+                                    <Link
+                                        to="/login"
+                                        className="block w-full py-3 px-4 text-center rounded-lg border border-amazon-orange text-amazon-orange font-medium hover:bg-amazon-orange/10 transition-colors"
+                                    >
                                         Accedi
                                     </Link>
-                                    <Link to="/register" className="block btn-primary w-full text-center">
+                                    <Link
+                                        to="/register"
+                                        className="block w-full py-3 px-4 text-center rounded-lg bg-amazon-orange text-white font-medium hover:bg-amazon-orange/90 transition-colors"
+                                    >
                                         Registrati
                                     </Link>
                                 </div>
