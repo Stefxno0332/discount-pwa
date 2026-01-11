@@ -1,0 +1,68 @@
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7
+    container_name: amazon-pwa-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=amazon-discount-pwa
+    networks:
+      - amazon-pwa-network
+
+  # Redis Cache
+  redis:
+    image: redis:alpine
+    container_name: amazon-pwa-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - amazon-pwa-network
+
+  # Backend API
+  backend:
+    build: ./backend
+    container_name: amazon-pwa-backend
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mongodb
+      - redis
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - MONGODB_URI=mongodb://mongodb:27017/amazon-discount-pwa
+      - REDIS_URL=redis://redis:6379
+      - FRONTEND_URL=http://localhost:3000
+    env_file:
+      - ./backend/.env
+    networks:
+      - amazon-pwa-network
+
+  # Frontend
+  frontend:
+    build: ./frontend
+    container_name: amazon-pwa-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - amazon-pwa-network
+
+volumes:
+  mongodb_data:
+  redis_data:
+
+networks:
+  amazon-pwa-network:
+    driver: bridge

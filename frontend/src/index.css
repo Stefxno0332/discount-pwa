@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        @apply bg-white dark:bg-dark-bg text-gray-900 dark:text-dark-text antialiased;
+        font-feature-settings: "ss01", "ss02", "cv01";
+    }
+
+    ::-webkit-scrollbar {
+        @apply w-2;
+    }
+
+    ::-webkit-scrollbar-track {
+        @apply bg-gray-100 dark:bg-dark-card;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply bg-gray-300 dark:bg-dark-border rounded-full;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        @apply bg-gray-400 dark:bg-gray-600;
+    }
+}
+
+@layer components {
+    .btn {
+        @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2;
+    }
+
+    .btn-primary {
+        @apply btn bg-amazon-orange hover:bg-amazon-orange-dark text-white focus:ring-amazon-orange shadow-md hover:shadow-lg;
+    }
+
+    .btn-secondary {
+        @apply btn bg-gray-200 dark:bg-dark-card hover:bg-gray-300 dark:hover:bg-dark-border text-gray-900 dark:text-dark-text focus:ring-gray-400;
+    }
+
+    .btn-ghost {
+        @apply btn bg-transparent hover:bg-gray-100 dark:hover:bg-dark-card text-gray-700 dark:text-dark-text;
+    }
+
+    .card {
+        @apply bg-white dark:bg-dark-card rounded-xl shadow-md border border-gray-100 dark:border-dark-border transition-all duration-300;
+    }
+
+    .card-hover {
+        @apply card hover:shadow-xl hover:-translate-y-1 hover:border-amazon-orange/30;
+    }
+
+    .input {
+        @apply w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-dark-border bg-white dark:bg-dark-card text-gray-900 dark:text-dark-text placeholder-gray-400 dark:placeholder-dark-muted focus:outline-none focus:ring-2 focus:ring-amazon-orange focus:border-transparent transition-all duration-200;
+    }
+
+    .badge {
+        @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+    }
+
+    .badge-discount {
+        @apply badge bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400;
+    }
+
+    .badge-hot {
+        @apply badge bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400;
+    }
+
+    .badge-best {
+        @apply badge bg-amazon-orange/10 text-amazon-orange;
+    }
+
+    .skeleton {
+        @apply bg-gray-200 dark:bg-dark-border animate-pulse rounded;
+    }
+
+    .gradient-text {
+        @apply bg-gradient-to-r from-amazon-orange to-yellow-500 bg-clip-text text-transparent;
+    }
+
+    .glass {
+        @apply bg-white/80 dark:bg-dark-card/80 backdrop-blur-lg;
+    }
+}
+
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+}
