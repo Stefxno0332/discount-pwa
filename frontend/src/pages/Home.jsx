@@ -172,8 +172,10 @@ const Home = () => {
                 </div>
             </main>
 
-            {/* Mobile Filter Panel */}
-            <FilterPanel isOpen={isFilterOpen} onClose={() => setIsFilterOpen(false)} />
+            {/* Mobile Filter Panel - hidden on desktop */}
+            <div className="lg:hidden">
+                <FilterPanel isOpen={isFilterOpen} onClose={() => setIsFilterOpen(false)} />
+            </div>
         </div>
     );
 };
