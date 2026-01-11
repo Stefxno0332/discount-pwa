@@ -4,18 +4,25 @@ import config from './env.js';
 let redis = null;
 
 const connectRedis = async () => {
+    // Skip Redis if URL not provided (e.g., Render free tier)
+    if (!config.redis.url || config.redis.url === '') {
+        console.log('Redis URL not configured, running without cache');
+        return null;
+    }
+
     try {
         redis = new Redis(config.redis.url, {
             maxRetriesPerRequest: 3,
             retryDelayOnFailover: 100,
-            lazyConnect: true
+            lazyConnect: true,
+            enableOfflineQueue: false
         });
 
         await redis.connect();
         console.log('Redis Connected');
 
         redis.on('error', (err) => {
-            console.error('Redis connection error:', err);
+            console.error('Redis connection error:', err.message);
         });
 
         redis.on('reconnecting', () => {
@@ -25,6 +32,7 @@ const connectRedis = async () => {
         return redis;
     } catch (error) {
         console.warn('Redis connection failed, continuing without cache:', error.message);
+        redis = null;
         return null;
     }
 };

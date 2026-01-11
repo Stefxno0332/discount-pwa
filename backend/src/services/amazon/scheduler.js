@@ -107,6 +107,14 @@ export const runDealsSyncJob = async () => {
 
 // Schedule the job to run every 6 hours
 export const startScheduler = () => {
+    // Check if Amazon PA-API is configured
+    const hasAmazonApi = process.env.AMAZON_ACCESS_KEY && process.env.AMAZON_SECRET_KEY;
+
+    if (!hasAmazonApi) {
+        console.log('Scheduler disabled: Amazon PA-API not configured. Add products manually via POST /api/products');
+        return;
+    }
+
     // Run at 00:00, 06:00, 12:00, 18:00
     cron.schedule('0 */6 * * *', runDealsSyncJob, {
         timezone: 'Europe/Rome'
