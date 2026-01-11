@@ -28,9 +28,9 @@ export default {
         uri: process.env.MONGODB_URI || 'mongodb://localhost:27017/amazon-discount-pwa'
     },
 
-    // Redis
+    // Redis (optional - leave empty to disable)
     redis: {
-        url: process.env.REDIS_URL || 'redis://localhost:6379'
+        url: process.env.REDIS_URL || ''
     },
 
     // JWT
