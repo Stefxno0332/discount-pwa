@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
-import { FiPlus, FiEdit2, FiTrash2, FiSave, FiX, FiPackage } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import { FiPlus, FiEdit2, FiTrash2, FiSave, FiX, FiPackage, FiLock } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import api from '../services/api';
+import { useAuthStore } from '../store';
 
 const Admin = () => {
+    const { isAuthenticated, user } = useAuthStore();
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [showForm, setShowForm] = useState(false);
@@ -119,6 +122,33 @@ const Admin = () => {
             toast.error('Errore nell\'eliminazione');
         }
     };
+
+    // Access control - must be authenticated admin
+    if (!isAuthenticated) {
+        return (
+            <div className="min-h-screen bg-gray-50 dark:bg-dark-bg flex items-center justify-center p-4">
+                <div className="text-center">
+                    <FiLock className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+                    <h1 className="text-2xl font-bold mb-2">Accesso Richiesto</h1>
+                    <p className="text-gray-500 mb-6">Devi effettuare l'accesso per accedere al pannello admin.</p>
+                    <Link to="/login" className="btn-primary">Accedi</Link>
+                </div>
+            </div>
+        );
+    }
+
+    if (user?.role !== 'admin') {
+        return (
+            <div className="min-h-screen bg-gray-50 dark:bg-dark-bg flex items-center justify-center p-4">
+                <div className="text-center">
+                    <FiLock className="w-16 h-16 mx-auto text-red-300 mb-4" />
+                    <h1 className="text-2xl font-bold mb-2">Accesso Negato</h1>
+                    <p className="text-gray-500 mb-6">Solo gli amministratori possono accedere a questa pagina.</p>
+                    <Link to="/" className="btn-secondary">Torna alla Home</Link>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-dark-bg py-8">

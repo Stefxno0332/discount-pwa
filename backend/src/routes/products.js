@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { Product } from '../models/index.js';
 import { asyncHandler } from '../middleware/index.js';
-import { optionalAuth } from '../middleware/auth.js';
+import { optionalAuth, authenticate, isAdmin } from '../middleware/auth.js';
 import { cacheGet, cacheSet } from '../config/redis.js';
 import socialService from '../services/social/socialService.js';
 
@@ -267,8 +267,8 @@ router.get('/:id/price-history', asyncHandler(async (req, res) => {
 // MANUAL PRODUCT MANAGEMENT (Admin Endpoints)
 // ============================================
 
-// Create a new product manually
-router.post('/', asyncHandler(async (req, res) => {
+// Create a new product manually (Admin only)
+router.post('/', authenticate, isAdmin, asyncHandler(async (req, res) => {
     const {
         asin,
         title,
@@ -339,8 +339,8 @@ router.post('/', asyncHandler(async (req, res) => {
     });
 }));
 
-// Update a product
-router.put('/:id', asyncHandler(async (req, res) => {
+// Update a product (Admin only)
+router.put('/:id', authenticate, isAdmin, asyncHandler(async (req, res) => {
     const { id } = req.params;
     const updates = req.body;
 
@@ -385,8 +385,8 @@ router.put('/:id', asyncHandler(async (req, res) => {
     });
 }));
 
-// Delete a product
-router.delete('/:id', asyncHandler(async (req, res) => {
+// Delete a product (Admin only)
+router.delete('/:id', authenticate, isAdmin, asyncHandler(async (req, res) => {
     const { id } = req.params;
 
     // Find and delete by ASIN or MongoDB ID
