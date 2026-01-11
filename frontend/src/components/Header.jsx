@@ -182,7 +182,7 @@ const Header = () => {
             {sidebarOpen && (
                 <div className="md:hidden fixed inset-0 z-50 bg-black/50" onClick={closeSidebar}>
                     <div
-                        className="absolute right-0 top-0 h-full w-[280px] max-w-[85vw] bg-white dark:bg-dark-card shadow-xl transform transition-transform duration-300"
+                        className="absolute right-0 top-0 h-full w-[280px] max-w-[85vw] bg-[#ffffff] dark:bg-[#1e293b] shadow-xl transform transition-transform duration-300"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div className="p-4 h-full flex flex-col">
