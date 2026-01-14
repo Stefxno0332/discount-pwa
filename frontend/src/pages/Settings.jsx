@@ -74,7 +74,9 @@ const Settings = () => {
             // Save preferences
             await api.put('/users/profile', {
                 preferences: {
-                    minDiscountPercent: minDiscount
+                    ...user.preferences,
+                    minDiscountPercent: minDiscount,
+                    darkMode: darkMode
                 }
             });
 
@@ -83,7 +85,11 @@ const Settings = () => {
                     ...user.notifications,
                     whatsapp: { enabled: whatsappEnabled, phone: whatsappPhone }
                 },
-                preferences: { ...user.preferences, minDiscountPercent: minDiscount }
+                preferences: {
+                    ...user.preferences,
+                    minDiscountPercent: minDiscount,
+                    darkMode: darkMode
+                }
             });
 
             toast.success('Impostazioni salvate');
@@ -111,7 +117,7 @@ const Settings = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-dark-bg">
-            <div className="container mx-auto px-4 py-8 max-w-2xl">
+            <div className="container mx-auto px-4 pt-24 pb-8 max-w-2xl">
                 <h1 className="text-2xl font-bold mb-8">Impostazioni</h1>
 
                 {/* Appearance */}

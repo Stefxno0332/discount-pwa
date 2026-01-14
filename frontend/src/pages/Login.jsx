@@ -11,12 +11,14 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
 
         if (!email || !password) {
-            toast.error('Compila tutti i campi');
+            setError('Compila tutti i campi');
             return;
         }
 
@@ -26,6 +28,7 @@ const Login = () => {
             toast.success('Accesso effettuato!');
             navigate('/');
         } else {
+            setError(result.error || 'Credenziali non valide');
             toast.error(result.error);
         }
     };
@@ -45,6 +48,13 @@ const Login = () => {
                         Accedi per continuare
                     </p>
                 </div>
+
+                {/* Error Message */}
+                {error && (
+                    <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-4 rounded-xl text-center mb-6 border border-red-200 dark:border-red-900/50">
+                        {error}
+                    </div>
+                )}
 
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="card p-6 space-y-4">
