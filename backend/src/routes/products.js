@@ -324,9 +324,9 @@ router.post('/', authenticate, isAdmin, asyncHandler(async (req, res) => {
 
     await product.save();
 
-    // Auto-post to social media (Telegram, etc.)
+    // Auto-post to social media (Telegram, Facebook, Instagram)
     try {
-        const shareResult = await socialService.shareProduct(product, 'new_deal', ['telegram']);
+        const shareResult = await socialService.shareProduct(product, 'new_deal', ['telegram', 'facebook', 'instagram']);
         console.log('Social share result:', shareResult);
     } catch (shareError) {
         console.error('Social share error (non-blocking):', shareError.message);
